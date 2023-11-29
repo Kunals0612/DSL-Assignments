@@ -45,7 +45,14 @@ public:
          free(temp);
       }
       do{
-         if(temp->next->in_time == i)
+         if(temp->next->in_time == i && temp->next->end_time==e)
+         {
+            Seat* del = temp->next;
+            temp->next = del->next;
+            free(del);
+            return;
+         }
+         temp = temp->next;
       }while(temp!=NULL);
    }
    void display()
