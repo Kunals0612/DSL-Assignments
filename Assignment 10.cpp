@@ -42,7 +42,7 @@ class Stack{
             return 0;
           } 
        }
-       bool top()
+       char top()
        {
           return arr[topele];
        }
@@ -69,7 +69,7 @@ int prec(char c)
 }
 string infixtoPostfix(string s)
 {
-    stack<char> st;
+    Stack st(s.length());
     string res;
     for (int i = 0; i < s.length(); i++)
     {
