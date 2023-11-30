@@ -1,72 +1,118 @@
-#include <iostream>
-#include <cstring>
+#include <bits/stdc++.h>
 using namespace std;
+class Stack{
+    public:
+       int topele;
+       int size;
+       char *arr;
+       Stack(int s)
+       {
+         size = s;
+         topele = -1;
+         arr = new char[s];
+       }
+       void push(char data)
+       {
+          topele++;
+          arr[topele] = data;
+       }
+       void pop()
+       {
+        topele--;
+       }
+       int empty()
+       {
+          if(topele == -1)
+          {
+             return 1;
+          }
+          else
+          {
+            return 0;
+          } 
+       }
+       bool full()
+       {
+        if(topele == size)
+          {
+             return 1;
+          }
+          else
+          {
+            return 0;
+          } 
+       }
+       bool top()
+       {
+          return arr[topele];
+       }
 
-bool isOperator(char c) {
-    return (c == '+' || c == '-' || c == '*' || c == '/');
-}
-
-//SETTING PRECEDENCE
-int getPrecedence(char op) {
-    if (op == '+' || op == '-')
-        return 1;
-    if (op == '*' || op == '/')
+};
+int prec(char c)
+{
+    if (c == '^')
+    {
+        return 3;
+    }
+    else if (c == '*' || c == '/')
+    {
         return 2;
-    return 0;
+    }
+    else if (c == '+' || c == '-')
+    {
+        return 1;
+    }
+    else
+    {
+        return -1;
+    }
 }
-
-//CONVERTING INFIX TO POSTFIX
-string infixToPostfix(string infix) {
-    string postfix = "";
-    int stackSize = 0;
-    char stackOperators[infix.length()];
-
-    for (char c : infix) {
-        if (c == ' ') {
-            continue;
+string infixtoPostfix(string s)
+{
+    stack<char> st;
+    string res;
+    for (int i = 0; i < s.length(); i++)
+    {
+        if ((s[i] >= 'a' && s[i] <= 'z') || (s[i] >= 'A' && s[i] <= 'Z'))
+        {
+            res += s[i];
         }
-        else if (isalnum(c)) {
-            postfix += c;
+        else if (s[i] == '(')
+        {
+            st.push(s[i]);
         }
-        else if (isOperator(c)) {
-            while (stackSize > 0 && stackOperators[stackSize - 1] != '(' &&
-                   getPrecedence(c) <= getPrecedence(stackOperators[stackSize - 1]))
+        else if (s[i] == ')')
+        {
+            while (!st.empty() && st.top() != '(')
             {
-                postfix += stackOperators[stackSize - 1];
-                stackSize--;
+                res += st.top();
+                st.pop();
             }
-            stackOperators[stackSize++] = c;
+            if (!st.empty())
+            {
+                st.pop();
+            }
         }
-        else if (c == '(') {
-            stackOperators[stackSize++] = c;
-        }
-        else if (c == ')') {
-            while (stackSize > 0 && stackOperators[stackSize - 1] != '(') {
-                postfix += stackOperators[stackSize - 1];
-                stackSize--;
+        else
+        {
+            while (!st.empty() && prec(st.top()) > prec(s[i]))
+            {
+                res += st.top();
+                st.pop();
             }
-            if (stackSize > 0 && stackOperators[stackSize - 1] == '(') {
-                stackSize--;
-            }
+            st.push(s[i]);
         }
     }
-
-    while (stackSize > 0) {
-        postfix += stackOperators[stackSize - 1];
-        stackSize--;
+    while (!st.empty())
+    {
+        res += st.top();
+        st.pop();
     }
-
-    return postfix;
+    return res;
 }
 
-
-int main() {
-    string infix;
-    cout << "Enter an infix expression: ";
-    getline(cin, infix);
-
-    string postfix = infixToPostfix(infix);
-    cout << "Postfix expression: " << postfix << std::endl;
-
+int main()
+{
+    cout << infixtoPostfix("(a-b/c)*(a/k-l)")<<endl;
     return 0;
 }
