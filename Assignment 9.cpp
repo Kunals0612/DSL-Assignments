@@ -1,99 +1,72 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
 using namespace std;
-class Stack
-{
+
+class Stack {
+    char arr[101];
+    int index;
+
 public:
-    int top;
-    int size;
-    char *arr;
-    Stack(int s)
-    {
-        size = s;
-        top = -1;
-        arr = new char[s];
-    }
-    void push(char data)
-    {
-        top++;
-        arr[top] = data;
-    }
-    void pop()
-    {
-        top--; 
-    }
-    int isfull()
-    {
-        if (top == size)
-        {
-            return 1;
+    Stack() {
+        for (int i = 0; i < 101; i++) {
+            arr[i] = ' '; // Initialize the stack with spaces
         }
-        else
-        {
-            return 0;
+        index = -1;
+    }
+ 
+    bool empty() {
+        return (index == -1);
+    }
+
+    bool full() {
+        return (index == 100);
+    }
+
+    void push(char ch) {
+        if (!full()) {
+            index++;
+            arr[index] = ch;
         }
     }
 
-    int empty()
-    {
-        if (top == -1)
-        {
-            return 1;
+    char pop() {
+        if (!empty()) {
+            char top = arr[index];
+            arr[index] = ' '; // Clear the element
+            index--;
+            return top;
         }
-        else
-        {
-            return 0;
-        }
-    }
-    void display()
-    {
-        for (int i = 0; i < size; i++)
-        {
-            cout << arr[i] << endl;
-        }
-    }
-    char gettop()
-    {
-        return arr[top];
-        
+        return ' '; // Return space for empty stack
     }
 };
-int main()
-{
-    string str;
-    cout << "Enter the string : " << endl;
-    cin >> str;
-    Stack s1(str.size());
-    int c = str.size();
-    for (int i = 0; i < c; i++)
-    {
+
+bool isValidParenthesis(string str) {
+    Stack s;
+    for (int i = 0; i < str.size(); i++) {
         char ch = str[i];
-        if (ch == '[' or ch == '{' or ch == '(')
-        {
-            s1.push(ch);
-        }
-        else
-        {
-            if (ch == ')' and !s1.empty() and s1.gettop() == '(')
-            {
-                s1.pop();
+        if (ch == '{' || ch == '[' || ch == '(') {
+            s.push(ch);
+        } else if (ch == '}' || ch == ']' || ch == ')') {
+            if (s.empty()) {
+                return false; // Unmatched closing parenthesis
             }
-            else if (ch == ']' and !s1.empty() and s1.gettop() == '[')
-            {
-                s1.pop();
-            }
-            else if (ch == '}' and !s1.empty() and s1.gettop() == '{')
-            {
-                s1.pop();
+            char top = s.pop();
+            if ((ch == '}' && top != '{') || (ch == ']' && top != '[') || (ch == ')' && top != '(')) {
+                return false; // Mismatched opening and closing parenthesis
             }
         }
     }
-    if(s1.empty())
-    {
-        cout<<"Yess"<<endl;
-    }
-    else
-    {
-        cout<<"No"<<endl;
+    return s.empty(); // Check if all opening parentheses were closed
+}
+
+int main() {
+    string str;
+    cout << "Enter the string: " << endl;
+    getline(cin, str);
+    if (isValidParenthesis(str)) {
+        cout << "String has valid parentheses." << endl;
+    } else {
+        cout << "String does not have valid parentheses." << endl;
     }
     return 0;
 }
