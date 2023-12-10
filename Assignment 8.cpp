@@ -44,7 +44,9 @@ public:
          head = head->next;
          free(temp);
       }
-      do{
+      else
+      {
+         do{
          if(temp->next->in_time == i && temp->next->end_time==e)
          {
             Seat* del = temp->next;
@@ -54,6 +56,9 @@ public:
          }
          temp = temp->next;
       }while(temp!=NULL);
+
+      }
+     
    }
    void display()
    {
