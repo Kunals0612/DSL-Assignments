@@ -7,6 +7,7 @@ public:
    int end_time;
    Seat *next;
    Seat(int i, int e)
+
    {
       in_time = i;
       end_time = e;
@@ -60,6 +61,34 @@ public:
       }
      
    }
+   void sort()
+    {
+       bool swapped;
+       Seat* temp;
+      
+        do {
+             swapped = false;
+             temp = head;
+
+             while (temp->next != NULL) {
+                 if ((temp->in_time > temp->next->in_time) && (temp->end_time > temp->next->end_time)) {
+                   
+                     int var = temp->in_time;
+                     temp->in_time = temp->next->in_time;
+                     temp->next->in_time = var;
+                     swapped = true;
+                     int var2 = temp->end_time;
+                     temp->end_time = temp->next->end_time;
+                     temp->next->end_time = var2;
+                     
+                 }
+                 temp = temp->next;
+             }
+
+
+         } while (swapped);
+
+    }
    void display()
    {
       if (head == NULL)
@@ -108,6 +137,10 @@ int main()
          cout << "Enter the cancelation end_time : ";
          cin >> e;
          a.cancel(i, e);
+      }
+      else if(choice == 4)
+      {
+         a.sort();
       }
       else
       {
