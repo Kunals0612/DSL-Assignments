@@ -1,15 +1,19 @@
-def quicksort(array):
-    if(len(array)<=1):
-        return array
-    else:
-        n = len(array)
-        pivot = array.pop()
-        greater = []
-        lesser = []
-        for i in array:
-            if(i>=pivot):
-                greater.append(i)
-            else:
-                lesser.append(i)
-    return quicksort(lesser)+ [pivot] + quicksort(greater)
-print(quicksort([10,30,20,50,40]))
+def partition(low, arr, high):
+    pivot = arr[high]
+    i = low - 1
+    for j in range(low, high):
+        if arr[j] <= pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+    arr[high], arr[i + 1] = arr[i + 1], arr[high]
+    return i + 1
+
+def quick_sort(low, arr, high):
+    if low < high:
+        pivot = partition(low, arr, high)
+        quick_sort(low, arr, pivot - 1)
+        quick_sort(pivot + 1, arr, high)
+
+no = [29, 10, 14, 37, 13]
+quick_sort(0, no, len(no) - 1)
+print(no)
