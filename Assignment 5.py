@@ -38,9 +38,20 @@ def insertionsort(student):
             j-=1
         student[j+1] = key
         print("Pass", i + 1, ": ", student)
-# def shellsort(student):
-#     n = len(student)
+        
+def shellsort(student):
+    n = len(student)
+    gap = n//2
+    while gap>0:
+        for i in range(gap,n):
+            temp = student[i]
+            j = i
+            while j>=gap and student[j-gap]>temp:
+                student[j] = student[j-gap]
+                j -= gap
 
+            student[j] = temp
+        gap//=2
 
 
 
@@ -55,7 +66,8 @@ if __name__ == "__main__":
     # print("sorted list by percentage bubble : ", student)
     print('''Enter 1 for bubble sort
              Enter 2 for selection sort
-             Enter 3 for insertion sort''')
+             Enter 3 for insertion sort
+             Enter 4 for shell sort''')
     choice = int(input("Enter the choice : "))
     if (choice == 1):
         bubblesort(student)
@@ -68,5 +80,7 @@ if __name__ == "__main__":
         print("Top five students are : ", student[:5])
     elif (choice == 3):
         insertionsort(student)
+    elif(choice == 4):
+        shellsort(student)
     else:
         print("Invalid choice")
